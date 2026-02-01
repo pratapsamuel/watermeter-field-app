@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Water Meter Camera</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="manifest" href="manifest.json">
+</head>
+<body style="font-family: Arial; text-align:center; padding:20px;">
+
+  <h2>Water Meter Photo Capture</h2>
+
+  <label>Villa Number:</label><br>
+  <input type="text" id="villa" placeholder="Eg: D3" style="font-size:18px; padding:5px;"><br><br>
+
+  <video id="camera" width="300" autoplay playsinline></video><br><br>
+
+  <button onclick="takePhoto()" style="font-size:18px; padding:10px 20px;">
+    📸 Capture Water Meter
+  </button>
+
+  <p id="status"></p>
+
+  <canvas id="canvas" style="display:none;"></canvas>
+
+  <script>
+    const video = document.getElementById('camera');
+
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+      .then(stream => video.srcObject = stream)
+      .catch(() => {
+        document.getElementById('status').innerText = "Camera access denied.";
+      });
+
+    function takePhoto() {
+      const villa = document.getElementById('villa').value.trim();
+      const status = document.getElementById('status');
+
+      if (!villa) {
+        status.innerText = "Enter Villa Number first.";
+        return;
+      }
+
+      const canvas = document.getElementById('canvas');
+      const context = canvas.getContext('2d');
+
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      context.drawImage(video, 0, 0);
+
+      canvas.toBlob(blob => {
+        const fileName = `Water_${villa}_Water.jpg`;
+
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = fileName;
+        link.click();
+
+        status.innerText = `Saved: ${fileName}`;
+      }, 'image/jpeg', 0.95);
+    }
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js');
+    }
+  </script>
+
+</body>
+</html>
