@@ -10,8 +10,27 @@
 
   <h2>Water Meter Photo Capture</h2>
 
-  <label>Villa Number:</label><br>
-  <input type="text" id="villa" placeholder="Eg: D3" style="font-size:18px; padding:5px;"><br><br>
+<label>Block:</label><br>
+<select id="block" style="font-size:18px; padding:5px;">
+  <option value="">Select Block</option>
+  <option>A</option>
+  <option>B</option>
+  <option>C</option>
+  <option>D</option>
+  <option>E</option>
+  <option>F</option>
+  <option>G</option>
+</select>
+
+<br><br>
+
+<label>Villa Number:</label><br>
+<select id="villaNum" style="font-size:18px; padding:5px;">
+  <option value="">Select Villa</option>
+</select>
+
+<br><br>
+
 
   <video id="camera" width="300" autoplay playsinline></video><br><br>
 
@@ -31,9 +50,26 @@
       .catch(() => {
         document.getElementById('status').innerText = "Camera access denied.";
       });
+    // Populate villa numbers 1–14
+    const villaSelect = document.getElementById('villaNum');
+    for (let i = 1; i <= 14; i++) {
+      const option = document.createElement('option');
+      option.value = i;
+      option.text = i;
+      villaSelect.appendChild(option);
+    }
 
     function takePhoto() {
-      const villa = document.getElementById('villa').value.trim();
+      const block = document.getElementById('block').value;
+      const villaNum = document.getElementById('villaNum').value;
+      
+      if (!block || !villaNum) {
+        status.innerText = "Select Block and Villa Number first.";
+        return;
+      }
+      
+      const villa = block + villaNum;
+
       const status = document.getElementById('status');
 
       if (!villa) {
