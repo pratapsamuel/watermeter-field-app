@@ -5,6 +5,12 @@
   <title>Water Meter Camera</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="manifest" href="manifest.json">
+
+  <script> 
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js');
+    }
+  </script>
 </head>
 <body style="font-family: Arial; text-align:center; padding:20px;">
 
@@ -96,9 +102,6 @@
       }, 'image/jpeg', 0.95);
     }
 
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js');
-    }
   </script>
 
 </body>
