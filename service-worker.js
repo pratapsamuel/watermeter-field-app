@@ -1,26 +1,21 @@
-const CACHE_NAME = "meter-camera-cache-v1";
+const CACHE_NAME = "meter-camera-cache-v2";
 const FILES_TO_CACHE = [
   "./",
   "index.html",
   "manifest.json"
 ];
 
-
-// Install: cache files
 self.addEventListener("install", event => {
+  self.skipWaiting();  // activate immediately
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll(FILES_TO_CACHE);
-    })
+    caches.open(CACHE_NAME).then(cache => cache.addAll(FILES_TO_CACHE))
   );
 });
 
-// Activate
 self.addEventListener("activate", event => {
-  event.waitUntil(self.clients.claim());
+  event.waitUntil(self.clients.claim()); // take control of all pages
 });
 
-// Fetch: serve from cache if offline
 self.addEventListener("fetch", event => {
   event.respondWith(
     fetch(event.request).catch(() => caches.match(event.request))
