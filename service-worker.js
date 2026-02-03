@@ -1,8 +1,10 @@
 const CACHE_NAME = "meter-camera-cache-v1";
 const FILES_TO_CACHE = [
+  "./",
   "index.html",
   "manifest.json"
 ];
+
 
 // Install: cache files
 self.addEventListener("install", event => {
